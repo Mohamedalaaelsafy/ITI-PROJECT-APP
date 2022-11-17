@@ -5,7 +5,7 @@ pipeline {
     // }
     stages {
         stage('Build Node App in container') {
-            agent { label 'container' }
+            // agent { label 'container' }
             steps {
                 withCredentials([kubeconfigContent(credentialsId: 'gke-config', variable: 'conf')]) {
                 sh '''
