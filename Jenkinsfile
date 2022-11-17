@@ -1,8 +1,8 @@
 pipeline {
     agent none
-    environment {
-        dockerhub=credentials('Docker_Hub')
-    }
+    // environment {
+    //     dockerhub=credentials('Docker_Hub')
+    // }
     stages {
         stage('Build Node App in container') {
             agent { label 'container' }
