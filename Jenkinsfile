@@ -10,7 +10,7 @@ pipeline {
                 script {
                  withCredentials([file(credentialsId: 'config', variable: 'cfg')]) {
                 sh '''
-                 kubectl get pods --kubeconfig=cfg
+                 sudo kubectl get pods --kubeconfig=cfg
                 '''
                  }
 }
