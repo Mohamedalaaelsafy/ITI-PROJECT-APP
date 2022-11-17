@@ -22,6 +22,7 @@ pipeline {
             steps {
                 script {
                 sh '''
+                  gcloud auth configure-docker
                   docker build -t gcr.io/optimistic-yeti-367811/python .
                   docker push gcr.io/optimistic-yeti-367811/python
                 '''
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 script {
                 sh '''
-                  kubectl apply -f app.yml
+                  kubectl apply -f python.yml
                 '''
                     }                
             }
