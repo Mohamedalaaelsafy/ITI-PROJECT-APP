@@ -7,13 +7,24 @@ pipeline {
         stage('Build Node App in container') {
             // agent { label 'container' }
             steps {
+                // script {
+                //  withCredentials([file(credentialsId: 'config', variable: 'cfg')]) {
+                // sh '''
+                //  kubectl get pods --kubeconfig=cfg
+                // '''
+                //  }
+                //     }
+
                 script {
-                 withCredentials([file(credentialsId: 'config', variable: 'cfg')]) {
+                 withCredentials([file(credentialsId: 'serv-acc', variable: 'GC_KEY')]) {
                 sh '''
-                 sudo kubectl get pods --kubeconfig=cfg
+                 gcloud auth activate-service-account --key-file=${GC_KEY}
+                 gcloud container clusters get-credentials prod --zone us-central1-a --project optimistic-yeti-367811"
+                 kubectl get pods
                 '''
                  }
-}
+                    }
+
             }
         }
     }
