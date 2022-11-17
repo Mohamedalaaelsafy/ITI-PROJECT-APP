@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      #serviceAccountName: jenkins-admin
+      #initContainers:
+      # - name: init-docker
+      #   image: docker
+      #   command: ["cp","/usr/local/bin/docker", "/opt/othertemp"]         
+      #   volumeMounts:  
+      #     - name: docker
+      #       mountPath: /opt/othertemp
+
+        #- name: kubectl
+        #image: allanlei/kubectl
+        #command: ['cp',"/usr/local/bin/kubectl", "/data/kubectl"]
+        # volumeMounts:
+        #- name: kubectl
+        #  mountPath: /data/kubectl
+          
+      containers:
+      - name: jenkins
+        image: gcr.io/optimistic-yeti-367811/jenkins
+          #imagePullPolicy: auto
+        ports:
+          - name: http-port
+            containerPort: 8080
+          - name: jnlp-port
+            containerPort: 50000
+        volumeMounts:
+          - name: home
+            mountPath: /var/jenkins_home
+          - name: sock
+            mountPath: /var/run/docker.sock
+          # - name: docker
+          #   subPath: docker
+            # mountPath: /usr/bin/docker
+          - name: kubectl
+            subPath: kubectl
+            mountPath: /usr/bin/kubectl
+      volumes:
+        - name: home
+          hostPath:
+            path: /home/docker/jenkins_home
+        - name: sock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: kubectl
+          emptyDir: {}
+        # - name: docker
+        #   emptyDir: {}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: jenkins
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-jnlp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 20
+      targetPort: 22
+  selector:
+    app: jenkins
