@@ -7,9 +7,9 @@ pipeline {
         stage('Build Node App in container') {
             // agent { label 'container' }
             steps {
-                withCredentials([kubeconfigContent(credentialsId: 'config', variable: 'conf')]) {
+                 withCredentials([file(credentialsId: 'config', variable: 'cfg')]) {
                 sh '''
-                 kubectl get pods --kubeconfig=conf
+                 kubectl get pods --kubeconfig=cfg
                 '''
 }
             }
