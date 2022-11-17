@@ -32,6 +32,7 @@ pipeline {
             steps {
                 script {
                 sh '''
+                  gcloud auth configure-docker
                   kubectl apply -f app.yml
                 '''
                     }                
