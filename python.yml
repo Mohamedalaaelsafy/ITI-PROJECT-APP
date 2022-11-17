@@ -14,7 +14,7 @@ spec:
     spec:
           
       containers:
-      - name: jenkins
+      - name: python
         image: gcr.io/optimistic-yeti-367811/python
         ports:
           - name: http-port
@@ -32,6 +32,6 @@ spec:
     - port: 80
       targetPort: 8000
   selector:
-    app: jenkins
+    app: python
 
 ---
